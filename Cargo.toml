@@ -1,0 +1,18 @@
+[package]
+name = "envoy-exporter"
+version = "0.0.1"
+authors = ["Ben Alex <ben.alex@acegi.com.au>"]
+repository = "https://github.com/benalexau/envoy-exporter"
+license = "MIT"
+readme = "README.md"
+description = "Prometheus exporter for Enphase Envoy Gateway"
+
+[dependencies]
+prometheus   = "0.4"
+lazy_static  = "0.2"
+hyper        = { version = "0.9", default-features = false }
+curl         = "0.4"
+serde        = "1.0"
+serde_derive = "1.0"
+serde_json   = "1.0"
+toml         = "0.4"
