@@ -1,4 +1,5 @@
-extern crate hyper;
+extern crate actix_web;
+extern crate bytes;
 extern crate curl;
 extern crate serde_json;
 extern crate toml;
@@ -11,12 +12,13 @@ extern crate prometheus;
 extern crate serde_derive;
 
 mod config;
-mod exporter;
 mod envoy_reader;
+mod handlers;
 
-use std::env;
+use actix_web::{server, App};
 use config::Config;
-use exporter::Exporter;
+use handlers::{index, metrics};
+use std::env;
 
 static BUILD_TIME: Option<&'static str> = option_env!("BUILD_TIME");
 static GIT_REVISION: Option<&'static str> = option_env!("GIT_REVISION");
@@ -50,11 +52,15 @@ fn main() {
         }
     };
 
-    match Exporter::start(config) {
-        Ok(_) => (),
-        Err(x) => {
-            println!("Server failed: {}", x);
-            return;
-        }
-    }
+    let addr = format!("0.0.0.0:{}", config.listen_port.unwrap_or(9422));
+
+    println!("Server started: {}", addr);
+
+    server::new(move || {
+        App::with_state(config.systems.clone())
+            .resource("/", |r| r.f(index))
+            .resource("/metrics", |r| r.f(metrics))
+    }).bind(addr)
+        .unwrap()
+        .run();
 }

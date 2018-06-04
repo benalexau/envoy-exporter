@@ -1,9 +1,9 @@
-use std::error::Error;
-use std::collections::HashMap;
-use curl::easy::Easy;
 use curl::easy::Auth;
+use curl::easy::Easy;
 use serde_json;
 use serde_json::Value;
+use std::collections::HashMap;
+use std::error::Error;
 
 pub struct EnvoyReader<'a> {
     url: &'a str,
@@ -38,10 +38,12 @@ impl<'a> EnvoyReader<'a> {
         let mut data = Vec::new();
         {
             let mut transfer = handle.transfer();
-            transfer.write_function(|new_data| {
-                data.extend_from_slice(new_data);
-                Ok(new_data.len())
-            }).unwrap();
+            transfer
+                .write_function(|new_data| {
+                    data.extend_from_slice(new_data);
+                    Ok(new_data.len())
+                })
+                .unwrap();
             transfer.perform().unwrap();
         }
         let json: Value = serde_json::from_slice(&data)?;
@@ -51,7 +53,7 @@ impl<'a> EnvoyReader<'a> {
     fn production(&mut self) -> Result<(), Box<Error>> {
         let json: Value = self.fetch_json("/api/v1/production")?;
         self.status.watt_hours_lifetime = json["wattHoursLifetime"].as_i64().unwrap();
-        self.status.watt_hours_today= json["wattHoursToday"].as_i64().unwrap();
+        self.status.watt_hours_today = json["wattHoursToday"].as_i64().unwrap();
         self.status.watts_now = json["wattsNow"].as_i64().unwrap();
         Ok(())
     }
@@ -85,7 +87,6 @@ impl EnvoyStatus {
             watt_hours_today: 0,
             watts_now: 0,
             inverters: HashMap::new(),
-
         }
     }
 }
