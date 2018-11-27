@@ -19,3 +19,7 @@ The format of `config_file` is shown in the `etc` directory.
 
 The password for the Envoy is typically the last six characters of the serial
 number. The serial number is available from the Envoy's public web interface.
+
+Arch Linux users can install the
+[envoy-exporter-git](https://aur.archlinux.org/packages/envoy-exporter-git/)
+package from AUR for a security-focused systemd unit with minimal permissions.
