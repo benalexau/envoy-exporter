@@ -3,7 +3,7 @@ use std::fs::File;
 use std::io::Read;
 use toml;
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Clone)]
 pub struct Config {
     pub listen_port: Option<u32>,
     pub systems: Vec<System>,

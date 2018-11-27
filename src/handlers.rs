@@ -50,14 +50,14 @@ static LANDING_PAGE: &'static str = "<html>
 </body>
 ";
 
-pub fn index(_req: HttpRequest<Vec<System>>) -> HttpResponse {
+pub fn index(_req: &HttpRequest<Vec<System>>) -> HttpResponse {
     HttpResponse::Ok()
         .content_encoding(ContentEncoding::Auto)
         .content_type("text/html")
         .body(LANDING_PAGE)
 }
 
-pub fn metrics(req: HttpRequest<Vec<System>>) -> HttpResponse {
+pub fn metrics(req: &HttpRequest<Vec<System>>) -> HttpResponse {
     for sys in req.state().clone() {
         let host = sys.host.unwrap_or(String::from(""));
         let url = sys.url.unwrap_or(String::from(""));
