@@ -17,6 +17,12 @@ envoy-exporter [config_file]
 
 The format of `config_file` is shown in the `etc` directory.
 
+### Docker 
+```
+docker build -t envoy-exporter .
+docker run -it --rm -p 9433:9433 -v ${PWD}/etc/config.toml:/config.toml envoy-exporter
+```
+
 The password for the Envoy is typically the last six characters of the serial
 number. The serial number is available from the Envoy's public web interface.
 
